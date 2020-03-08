@@ -22,7 +22,7 @@ public abstract class Entity {
 	
 	public abstract void tick();
 	
-	protected void render(Graphics g) {
+	public void render(Graphics g) {
 		g.drawImage(texture, position, scale, new Vector2f(0, 0), new Color(255, 255, 255, 1));
 	}
 

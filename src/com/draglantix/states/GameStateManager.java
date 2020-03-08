@@ -11,8 +11,9 @@ public class GameStateManager extends GSM {
 
 	private GameState currentState;
 	
-	private IntroState introState;
+	private SplashState splashState;
 	private MenuState menuState;
+	private IntroState introState;
 	private PlayState playState;
 
 	@Override
@@ -20,8 +21,9 @@ public class GameStateManager extends GSM {
 		super.init();
 		Assets.init(g);
 	
-		introState = new IntroState(g, this);
+		splashState = new SplashState(g, this);
 		menuState = new MenuState(g, this);
+		introState = new IntroState(g, this);
 		playState = new PlayState(g, this);
 		
 		setState(Settings.START_STATE);
@@ -42,13 +44,17 @@ public class GameStateManager extends GSM {
 			currentState.stop();
 		
 		switch(state) {
-			case INTRO:
-				currentState = introState;
+			case SPLASH:
+				currentState = splashState;
 				break;
 			case MENU:
 				currentState = menuState;
 				break;
+			case INTRO:
+				currentState = introState;
+				break;
 			case PLAY:
+				playState.init();
 				currentState = playState;
 				break;
 			default:

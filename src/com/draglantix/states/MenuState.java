@@ -1,5 +1,7 @@
 package com.draglantix.states;
 
+import java.io.File;
+
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
@@ -8,6 +10,7 @@ import com.draglantix.flare.util.Color;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
 import com.draglantix.main.Settings;
+import com.draglantix.world.World;
 
 public class MenuState extends GameState {
 
@@ -17,7 +20,9 @@ public class MenuState extends GameState {
 	private static float screenWidth = Window.getWidth()/Graphics.getScale();
 	private static float screenHeight = Window.getHeight()/Graphics.getScale();
 	
-	private int settingsIndex;
+	//private int settingsIndex;
+	
+	private boolean save1exists, save2exists, save3exists;
 	
 	public enum MenuSection {
 		MAIN((screenHeight/8), new String[] {"Start", "Options", "Quit"}),
@@ -49,6 +54,19 @@ public class MenuState extends GameState {
 	public MenuState(Graphics g, GameStateManager gsm) {
 		super(g, gsm);
 	}
+	
+	private void checkSaves() {
+		 File save1, save2, save3;
+	    
+         save1 = new File("res/maps/save1.map");
+         save2 = new File("res/maps/save2.map");
+         save3 = new File("res/maps/save3.map");
+
+         save1exists = save1.exists();
+         save2exists = save2.exists();
+         save3exists = save3.exists();
+	     
+	}
 
 	@Override
 	public void tick() {
@@ -70,21 +88,33 @@ public class MenuState extends GameState {
 					if(currentIndex == 0) {
 						currentSection = MenuSection.CREATE;
 					}else if(currentIndex == 1) {
-						
+						if(save1exists) {
+							World.setCurrentLevel("save1");
+							gsm.setState(States.PLAY);
+						}
 					}else if(currentIndex == 2) {
-						
+						if(save2exists) {
+							World.setCurrentLevel("save2");
+							gsm.setState(States.PLAY);
+						}
 					}else if(currentIndex == 3) {
-						
+						if(save3exists) {
+							World.setCurrentLevel("save3");
+							gsm.setState(States.PLAY);
+						}
 					}else {
 						currentSection = MenuSection.MAIN;
 					}
 					break;
 				case CREATE:
 					if(currentIndex == 0) {
+						World.createNewWorld(939293, "save1");
 						currentSection = MenuSection.START;
 					}else if(currentIndex == 1) {
+						World.createNewWorld(939293, "save2");
 						currentSection = MenuSection.START;
-					}else if(currentIndex == 1) {
+					}else if(currentIndex == 2) {
+						World.createNewWorld(939293, "save3");
 						currentSection = MenuSection.START;
 					}else {
 						currentSection = MenuSection.MAIN;
@@ -92,7 +122,7 @@ public class MenuState extends GameState {
 					break;
 				case OPTIONS:
 					if(currentIndex == 0) {
-						settingsIndex = 0;
+						//settingsIndex = 0;
 						currentSection = MenuSection.SETBOOL;
 					}else{
 						currentSection = MenuSection.MAIN;
@@ -111,6 +141,7 @@ public class MenuState extends GameState {
 			}
 			
 			currentIndex = 0;
+			checkSaves();
 		}
 		
 		if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_S) || Window.getInput().isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
@@ -152,7 +183,19 @@ public class MenuState extends GameState {
 		}
 		
 		for(int i = 0; i < currentSection.getList().length; i++) {
-			g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(255, 255, 255, alpha), g.FONT_LEFT );
+			if(currentSection == MenuSection.START) {
+				if(i == 1 && !save1exists) {
+					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(55, 55, 55, alpha), g.FONT_LEFT );
+				}else if(i == 2 && !save2exists) {
+					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(55, 55, 55, alpha), g.FONT_LEFT );			
+				}else if(i == 3 && !save3exists) {
+					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(55, 55, 55, alpha), g.FONT_LEFT );
+				}else {
+					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(255, 255, 255, alpha), g.FONT_LEFT );
+				}
+			}else {
+				g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(255, 255, 255, alpha), g.FONT_LEFT );
+			}
 		}
 		g.drawImage(Assets.selector, new Vector2f((-screenWidth/2) + 20f, currentSection.cursorOffset - (currentIndex * 32)), new Vector2f(8, 8), new Vector2f(0, 0), new Color(255, 255, 255, alpha));
 	}
