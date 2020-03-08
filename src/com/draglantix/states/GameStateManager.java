@@ -10,7 +10,9 @@ import com.draglantix.main.Settings;
 public class GameStateManager extends GSM {
 
 	private GameState currentState;
-
+	
+	private IntroState introState;
+	private MenuState menuState;
 	private PlayState playState;
 
 	@Override
@@ -18,6 +20,8 @@ public class GameStateManager extends GSM {
 		super.init();
 		Assets.init(g);
 	
+		introState = new IntroState(g, this);
+		menuState = new MenuState(g, this);
 		playState = new PlayState(g, this);
 		
 		setState(Settings.START_STATE);
@@ -38,10 +42,15 @@ public class GameStateManager extends GSM {
 			currentState.stop();
 		
 		switch(state) {
+			case INTRO:
+				currentState = introState;
+				break;
+			case MENU:
+				currentState = menuState;
+				break;
 			case PLAY:
 				currentState = playState;
 				break;
-	
 			default:
 				break;
 		}

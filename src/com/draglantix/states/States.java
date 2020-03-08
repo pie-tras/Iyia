@@ -1,5 +1,5 @@
 package com.draglantix.states;
 
 public enum States {
-	PLAY
+	INTRO, MENU, PLAY
 }

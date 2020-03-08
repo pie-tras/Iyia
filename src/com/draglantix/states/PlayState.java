@@ -6,20 +6,20 @@ import org.lwjgl.glfw.GLFW;
 import com.draglantix.flare.graphics.Graphics;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
-import com.draglantix.world.WorldData;
+import com.draglantix.world.World;
 
 public class PlayState extends GameState {
 	
 	private Vector2f delta = new Vector2f(0, 0);
 	private float speed = 15;
 	
-	private WorldData worldData;
+	private World world;
+	
+	private float zoom = 0;
 	
 	public PlayState(Graphics g, GameStateManager gsm) {
 		super(g, gsm);
-		System.out.println("Gen Started...");
-		worldData = new WorldData();
-		System.out.println("Gen Finished.");
+		world = new World(1920304);
 	}
 	
 	@Override
@@ -41,16 +41,26 @@ public class PlayState extends GameState {
 		}
 		
 		Assets.camera.move(delta);
+		
+
+		zoom = 0;
+		
+		if(Window.getInput().isKeyDown(GLFW.GLFW_KEY_Q)) {
+			zoom += 0.01;
+			Assets.camera.setZoom(Assets.camera.getZoom() + zoom);
+		}
+		
+		if(Window.getInput().isKeyDown(GLFW.GLFW_KEY_E)) {
+			zoom += 0.01;
+			Assets.camera.setZoom(Assets.camera.getZoom() - zoom);
+		}
+		
 	}
 	
 	@Override
 	public void render() {
 		g.drawMode(g.DRAW_WORLD);
 		
-		for(int x = 0; x < WorldData.WORLD_SIZE; x++) {
-			for(int y = 0; y < WorldData.WORLD_SIZE; y++) {
-				worldData.map[x][y].render(g);
-			}
-		}
+		world.render(g, Assets.camera.getPosition());
 	}
 }
