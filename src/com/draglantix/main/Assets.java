@@ -34,7 +34,7 @@ public class Assets {
 	public static void init(Graphics g) {
 
 		camera = new Camera(new Vector2f(0, 0), 0, 0, .07f);
-		font = new Font(new SpriteSheet("textures/font.png"), 8);
+		font = new Font(new SpriteSheet("textures/font.png"), 8, 1);
 		g.setCamera(camera);
 		Graphics.setScale(4);
 		

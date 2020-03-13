@@ -9,6 +9,7 @@ import com.draglantix.flare.graphics.Graphics;
 import com.draglantix.flare.util.Color;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
+import com.draglantix.main.Game;
 import com.draglantix.main.Settings;
 import com.draglantix.world.World;
 
@@ -19,8 +20,9 @@ public class MenuState extends GameState {
 	
 	private static float screenWidth = Window.getWidth()/Graphics.getScale();
 	private static float screenHeight = Window.getHeight()/Graphics.getScale();
+	private static float offset = Window.getHeight() / 50f;
 	
-	//private int settingsIndex;
+	private int settingsIndex;
 	
 	private boolean save1exists, save2exists, save3exists;
 	
@@ -41,6 +43,14 @@ public class MenuState extends GameState {
 
 		public float getCursorOffset() {
 			return cursorOffset;
+		}
+		
+		public void resetCursorOffset() {
+			MAIN.cursorOffset = (screenHeight/8);
+			START.cursorOffset = (screenHeight/2) - (screenHeight/8);
+			CREATE.cursorOffset = (screenHeight/2) - (screenHeight/8);
+			OPTIONS.cursorOffset = (screenHeight/2) - (screenHeight/8);
+			SETBOOL.cursorOffset = (screenHeight/2) - (screenHeight/8);
 		}
 		
 		public String[] getList() {
@@ -71,6 +81,13 @@ public class MenuState extends GameState {
 	@Override
 	public void tick() {
 		
+		if(Window.hasResized()) {
+			 screenWidth = Window.getWidth()/Graphics.getScale();
+			 screenHeight = Window.getHeight()/Graphics.getScale();
+			 offset = Window.getHeight()/50f;
+			 MenuSection.MAIN.resetCursorOffset();
+		}
+		
 		fadeMenu();
 		
 		if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_SPACE) || Window.getInput().isKeyPressed(GLFW.GLFW_KEY_ENTER)) {
@@ -90,17 +107,17 @@ public class MenuState extends GameState {
 					}else if(currentIndex == 1) {
 						if(save1exists) {
 							World.setCurrentLevel("save1");
-							gsm.setState(States.PLAY);
+							gsm.setState(States.INTRO);
 						}
 					}else if(currentIndex == 2) {
 						if(save2exists) {
 							World.setCurrentLevel("save2");
-							gsm.setState(States.PLAY);
+							gsm.setState(States.INTRO);
 						}
 					}else if(currentIndex == 3) {
 						if(save3exists) {
 							World.setCurrentLevel("save3");
-							gsm.setState(States.PLAY);
+							gsm.setState(States.INTRO);
 						}
 					}else {
 						currentSection = MenuSection.MAIN;
@@ -122,7 +139,7 @@ public class MenuState extends GameState {
 					break;
 				case OPTIONS:
 					if(currentIndex == 0) {
-						//settingsIndex = 0;
+						settingsIndex = 0;
 						currentSection = MenuSection.SETBOOL;
 					}else{
 						currentSection = MenuSection.MAIN;
@@ -130,12 +147,24 @@ public class MenuState extends GameState {
 					break;
 				case SETBOOL:
 					if(currentIndex == 0) {
-						//Set selected setting to true
+						switch(settingsIndex) {
+							case 0:
+								Settings.DEBUG = true;
+							default:
+								break;
+						}
 					}else if(currentIndex == 1) {
-						//Set selected setting to false
-					}else{
-						currentSection = MenuSection.OPTIONS;
+						switch(settingsIndex) {
+							case 0:
+								Settings.DEBUG = false;
+							default:
+								break;
+						}
 					}
+					currentSection = MenuSection.OPTIONS;
+					MenuSection.OPTIONS.list =  new String[] {"Debug: " + Settings.DEBUG, "Back"};
+					Game.resetSettings();
+					
 				default:
 					break;
 			}
@@ -179,24 +208,24 @@ public class MenuState extends GameState {
 	@Override
 	public void render() {
 		if(currentSection == MenuSection.MAIN) {
-			g.drawString(Assets.font, "Iyia", new Vector2f((-screenWidth/2) + 20f, (screenHeight/2) - 30f), new Vector2f(32, 32), new Color(255, 255, 255, alpha), g.FONT_LEFT);
+			g.drawString(Assets.font, "Iyia", new Vector2f((-screenWidth/2) + (offset*.8f), (screenHeight/2) - offset), new Vector2f(screenHeight/10), new Color(255, 255, 255, alpha), g.FONT_LEFT);
 		}
 		
 		for(int i = 0; i < currentSection.getList().length; i++) {
 			if(currentSection == MenuSection.START) {
 				if(i == 1 && !save1exists) {
-					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(55, 55, 55, alpha), g.FONT_LEFT );
+					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + offset, currentSection.getCursorOffset() - (i * offset)), new Vector2f(screenHeight/30), new Color(55, 55, 55, alpha), g.FONT_LEFT );
 				}else if(i == 2 && !save2exists) {
-					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(55, 55, 55, alpha), g.FONT_LEFT );			
+					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + offset, currentSection.getCursorOffset() - (i * offset)), new Vector2f(screenHeight/30), new Color(55, 55, 55, alpha), g.FONT_LEFT );			
 				}else if(i == 3 && !save3exists) {
-					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(55, 55, 55, alpha), g.FONT_LEFT );
+					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + offset, currentSection.getCursorOffset() - (i * offset)), new Vector2f(screenHeight/30), new Color(55, 55, 55, alpha), g.FONT_LEFT );
 				}else {
-					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(255, 255, 255, alpha), g.FONT_LEFT );
+					g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + offset, currentSection.getCursorOffset() - (i * offset)), new Vector2f(screenHeight/30), new Color(255, 255, 255, alpha), g.FONT_LEFT );
 				}
 			}else {
-				g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + 32f, currentSection.getCursorOffset() - (i * 32)), new Vector2f(6, 6), new Color(255, 255, 255, alpha), g.FONT_LEFT );
+				g.drawString(Assets.font, currentSection.getList()[i], new Vector2f((-screenWidth/2) + offset, currentSection.getCursorOffset() - (i * offset)), new Vector2f(screenHeight/30), new Color(255, 255, 255, alpha), g.FONT_LEFT );
 			}
 		}
-		g.drawImage(Assets.selector, new Vector2f((-screenWidth/2) + 20f, currentSection.cursorOffset - (currentIndex * 32)), new Vector2f(8, 8), new Vector2f(0, 0), new Color(255, 255, 255, alpha));
+		g.drawImage(Assets.selector, new Vector2f((-screenWidth/2) + (offset*.8f), currentSection.cursorOffset - (currentIndex * offset)), new Vector2f(screenHeight/30), new Vector2f(0, 0), new Color(255, 255, 255, alpha));
 	}
 }

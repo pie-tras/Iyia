@@ -10,7 +10,7 @@ import com.draglantix.main.Assets;
 
 public class IntroState extends GameState {
 	
-	private float alpha = 1f;
+	private float alpha = 0f;
 	private boolean fadeIn = true;
 	
 	private String message = "Deep in the Syidra forest, a wood fire burns low...";

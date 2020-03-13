@@ -14,13 +14,15 @@ public class EntityManager {
 	
 	public static void tick() {
 		for(Dynamic d: dynamics) {
-			d.tick();
+			if(DragonMath.isOnScreen(d.getPosition(), new Vector2f(64, 64))) {
+				d.tick();
+			}
 		}
 	}
 	
 	public static void render(Graphics g) {
 		for(Dynamic d: dynamics) {
-			if(DragonMath.isOnScreen(d.getPosition(), new Vector2f(64, 64), g)) {
+			if(DragonMath.isOnScreen(d.getPosition(), new Vector2f(64, 64))) {
 				d.render(g);
 				//Debug.renderBounds(d.getBounds(), g);
 			}

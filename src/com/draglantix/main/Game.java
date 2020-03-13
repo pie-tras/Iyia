@@ -7,7 +7,11 @@ import com.draglantix.main.Settings;
 public class Game {
 
 	public static void main(String[] args) {
-		new FlareEngine(new GameStateManager(), Settings.FPS_CAP, 0, 0, Settings.WINDOW_TITLE, Settings.DEBUG);
+		new FlareEngine(new GameStateManager(), Settings.FPS_CAP, 800, 600, Settings.WINDOW_TITLE, true, false, Settings.DEBUG);
+	}
+	
+	public static void resetSettings() {
+		
 	}
 
 }
