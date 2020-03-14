@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 
 import com.draglantix.flare.graphics.Graphics;
 import com.draglantix.flare.util.Reader;
+import com.draglantix.utils.DragonMath;
 import com.draglantix.world.World;
 
 public class TileMap {
@@ -19,7 +20,10 @@ public class TileMap {
 	public void render(Graphics g) {
 		for(int x = 0; x < map.length; x++) {
 			for(int y = 0; y < map[x].length; y++) {
-				map[x][y].render(g);
+				Tile t = map[x][y];
+				if(DragonMath.isOnScreen(t.getPos(), new Vector2f(32))){
+					t.render(g);
+				}
 			}
 		}
 	}
