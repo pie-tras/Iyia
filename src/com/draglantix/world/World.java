@@ -8,8 +8,8 @@ import com.draglantix.tiles.TileMap;
 
 public class World {
 
-	public static final int TILE_MAP_SIZE = 64;
-	public static final int TILE_SIZE = 16;
+	public static final int TILE_MAP_SIZE = 128;
+	public static final int TILE_SIZE = 8;
 
 	private static int seed;
 	
@@ -29,7 +29,7 @@ public class World {
 		String mapString = "";
 		for(int x = 0; x < TILE_MAP_SIZE; x++) {
 			for(int y = 0; y < TILE_MAP_SIZE; y++) {
-				int id = generator.dungeonTile(x, y);
+				int id = generator.getTile(x, y);
 				mapString += id + " ";
 			}
 			mapString += "\n";

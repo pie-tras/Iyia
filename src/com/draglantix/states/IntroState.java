@@ -45,7 +45,7 @@ public class IntroState extends GameState {
 	@Override
 	public void render() {
 		g.drawMode(g.DRAW_SCREEN);
-		g.drawString(Assets.font, message, new Vector2f(0, 0), new Vector2f(6, 6), new Color(255, 255, 255, alpha), g.FONT_CENTER);
+		g.drawString(Assets.font, message, new Vector2f(0, 0), new Vector2f(Window.getWidth()/250f), new Color(255, 255, 255, alpha), g.FONT_CENTER);
 	}
 
 }

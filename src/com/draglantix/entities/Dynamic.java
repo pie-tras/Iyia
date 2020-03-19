@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 
 import com.draglantix.flare.audio.AudioMaster;
 import com.draglantix.flare.audio.Source;
+import com.draglantix.flare.collision.AABB;
 import com.draglantix.flare.textures.Animation;
 
 public abstract class Dynamic extends Entity{
@@ -15,10 +16,13 @@ public abstract class Dynamic extends Entity{
 	protected float speed = 1f;
 
 	protected Animation animation = null;
+
+	protected AABB bounds;
 	
-	public Dynamic(Animation animation, Vector2f position, Vector2f scale) {
+	public Dynamic(Animation animation, Vector2f position, Vector2f scale, AABB bounds) {
 		super(animation.getTexture(), position, scale);
 		this.animation = animation;
+		this.bounds = bounds;
 		source = new Source(1.5f, 10f, 0);
 		source.setPosition(this.position);
 		AudioMaster.sources.add(source);
@@ -36,13 +40,15 @@ public abstract class Dynamic extends Entity{
 	private boolean checkLiving() {
 		return health > 0f;
 	}
-	
-//	private void checkForCollisions(Vector2f dir) {
-//		
-//	}
 
-	public void move(Vector2f dir, boolean checkCollide) {
-		position.add(dir);
+	public void move(Vector2f dir) {
+		if(bounds != null) {
+			bounds.getCenter().add(dir);
+			EntityManager.checkCollisions(this);
+			position = new Vector2f(bounds.getCenter());
+		}else {
+			position.add(dir);
+		}
 	}
 	
 	public float getSpeed() {

@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.draglantix.entities.EntityManager;
 import com.draglantix.entities.Player;
+import com.draglantix.flare.collision.AABB;
 import com.draglantix.flare.graphics.Graphics;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
@@ -26,8 +27,10 @@ public class PlayState extends GameState {
 	
 	public void init() {
 		world = new World();
-		player = new Player(Assets.IplayerDAnim, new Vector2f(0, 0), new Vector2f(16, 16));
+		player = new Player(Assets.playerIdleR, new Vector2f(-8, 0), new Vector2f(16, 16), new AABB(new Vector2f(-8,0), new Vector2f(4, 6), true));
 		EntityManager.dynamics.add(player);
+		
+	//	EntityManager.dynamics.add(new Sheep(Assets.playerIdleL, new Vector2f(150, 150), new Vector2f(16, 16), new AABB(new Vector2f(150, 150), new Vector2f(8, 8), true)));
 	}
 	
 	@Override
@@ -45,8 +48,8 @@ public class PlayState extends GameState {
 	
 	public void updateCamera() {
 		Assets.camera.move(player.getPosition());
-		Assets.camera.correctCamera(new Vector2f((-world_size/2) - ((World.TILE_SIZE * Graphics.getScale())/2), (-world_size/2) + ((World.TILE_SIZE * Graphics.getScale())/2)),
-				new Vector2f((world_size - (world_size/2)) - ((World.TILE_SIZE * Graphics.getScale())/2), (world_size - (world_size/2)) - ((World.TILE_SIZE * Graphics.getScale())/2)));
+//		Assets.camera.correctCamera(new Vector2f((-world_size/2) - ((World.TILE_SIZE * Graphics.getScale())/2), (-world_size/2) + ((World.TILE_SIZE * Graphics.getScale())/2)),
+//				new Vector2f((world_size - (world_size/2)) - ((World.TILE_SIZE * Graphics.getScale())/2), (world_size - (world_size/2)) - ((World.TILE_SIZE * Graphics.getScale())/2)));
 	
 		zoom = 0;
 		

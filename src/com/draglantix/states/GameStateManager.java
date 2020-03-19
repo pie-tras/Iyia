@@ -48,6 +48,7 @@ public class GameStateManager extends GSM {
 				currentState = splashState;
 				break;
 			case MENU:
+				menuState.init();
 				currentState = menuState;
 				break;
 			case INTRO:

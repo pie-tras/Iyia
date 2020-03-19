@@ -16,9 +16,9 @@ public class TileLib {
 		switch(id){
 		
 			case 0:
-				return new Tile(Assets.stone, "stone", id, pos, new Color(255, 255, 255, 1));
+				return new Tile(Assets.stone_background, "stone_background", id, pos, false, new Color(255, 255, 255, 1));
 			case 1:
-				return new Tile(Assets.stone_wall, "stone_wall", id, pos, new Color(255, 255, 255, 1));
+				return new Tile(Assets.stone_wall, "stone_wall", id, pos, true, new Color(255, 255, 255, 1));
 			default:
 				return null;
 		}

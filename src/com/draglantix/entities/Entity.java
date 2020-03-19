@@ -13,7 +13,7 @@ public abstract class Entity {
 	protected Vector2f scale;
 	
 	protected boolean onScreen;
-	
+
 	public Entity(Texture texture, Vector2f position, Vector2f scale) {
 		this.texture = texture;
 		this.position = position;
@@ -48,6 +48,14 @@ public abstract class Entity {
 
 	public void setScale(Vector2f scale) {
 		this.scale = scale;
+	}
+	
+	public boolean isOnScreen() {
+		return onScreen;
+	}
+
+	public void setOnScreen(boolean onScreen) {
+		this.onScreen = onScreen;
 	}
 
 }

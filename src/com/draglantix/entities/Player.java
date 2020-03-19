@@ -3,6 +3,7 @@ package com.draglantix.entities;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
+import com.draglantix.flare.collision.AABB;
 import com.draglantix.flare.textures.Animation;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
@@ -10,12 +11,13 @@ import com.draglantix.main.Assets;
 public class Player extends Dynamic{
 
 	private Vector2f destination = new Vector2f(0, 0);
-	private Vector2f last = new Vector2f();
-	private boolean moved = false, sprinting = false;
-	private float speed = 1.2f;
+	private float lastX = 1;
+	private boolean moved = false;
 	
-	public Player(Animation animation, Vector2f position, Vector2f scale) {
-		super(animation, position, scale);
+	public Player(Animation animation, Vector2f position, Vector2f scale, AABB bounds) {
+		super(animation, position, scale, bounds);
+		this.speed = 1.2f;
+		//this.bounds = null;
 	}
 
 	@Override
@@ -45,55 +47,37 @@ public class Player extends Dynamic{
 		}
 		
 		if(destination.length() != 0) {
-			move(destination.normalize(speed), true);
+			move(destination.normalize(speed));
 		}
 		
 		handleAnimations();
 		
-		last = new Vector2f(destination);
+		if(destination.x != 0) {
+			lastX = destination.x;
+		}
+		
 		moved = false;
 	}
 	
 	private void handleAnimations() {
 		
-		if(!moved) {
-			if(last.y > 0) {
-				this.animation = Assets.IplayerUAnim;
-			} else if(last.y < 0) {
-				this.animation = Assets.IplayerDAnim;
-			}
-
-			if(last.x > 0) {
-				this.animation = Assets.IplayerRAnim;
-			} else if(last.x < 0) {
-				this.animation = Assets.IplayerLAnim;
+		if(moved) {
+			if(destination.x > 0) {
+				this.animation = Assets.playerWalkR;
+			}else if(destination.x < 0) {
+				this.animation = Assets.playerWalkL;
+			}else {
+				if(lastX > 0) {
+					this.animation = Assets.playerWalkR;
+				} else if(lastX < 0) {
+					this.animation = Assets.playerWalkL;
+				}
 			}
 		}else {
-			
-			if(sprinting) {
-				if(destination.y > 0) {
-					this.animation = Assets.playerUAnimS;
-				} else if(destination.y < 0) {
-					this.animation = Assets.playerDAnimS;
-				}
-		
-				if(destination.x > 0) {
-					this.animation = Assets.playerRAnimS;
-				} else if(destination.x < 0) {
-					this.animation = Assets.playerLAnimS;
-				}
-			}else {
-				if(destination.y > 0) {
-					this.animation = Assets.playerUAnim;
-				} else if(destination.y < 0) {
-					this.animation = Assets.playerDAnim;
-				}
-		
-				if(destination.x > 0) {
-					this.animation = Assets.playerRAnim;
-				} else if(destination.x < 0) {
-					this.animation = Assets.playerLAnim;
-				}
+			if(lastX > 0) {
+				this.animation = Assets.playerIdleR;
+			} else if(lastX < 0) {
+				this.animation = Assets.playerIdleL;
 			}
 		}
 		

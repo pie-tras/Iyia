@@ -65,6 +65,10 @@ public class MenuState extends GameState {
 		super(g, gsm);
 	}
 	
+	public void init() {
+		rescale();
+	}
+	
 	private void checkSaves() {
 		 File save1, save2, save3;
 	    
@@ -77,15 +81,19 @@ public class MenuState extends GameState {
          save3exists = save3.exists();
 	     
 	}
+	
+	private void rescale() {
+		screenWidth = Window.getWidth()/Graphics.getScale();
+		screenHeight = Window.getHeight()/Graphics.getScale();
+		offset = Window.getHeight()/50f;
+		MenuSection.MAIN.resetCursorOffset();
+	}
 
 	@Override
 	public void tick() {
 		
 		if(Window.hasResized()) {
-			 screenWidth = Window.getWidth()/Graphics.getScale();
-			 screenHeight = Window.getHeight()/Graphics.getScale();
-			 offset = Window.getHeight()/50f;
-			 MenuSection.MAIN.resetCursorOffset();
+			 rescale();
 		}
 		
 		fadeMenu();
@@ -125,13 +133,13 @@ public class MenuState extends GameState {
 					break;
 				case CREATE:
 					if(currentIndex == 0) {
-						World.createNewWorld(939293, "save1");
+						World.createNewWorld(3294, "save1");
 						currentSection = MenuSection.START;
 					}else if(currentIndex == 1) {
-						World.createNewWorld(939293, "save2");
+						World.createNewWorld(3294, "save2");
 						currentSection = MenuSection.START;
 					}else if(currentIndex == 2) {
-						World.createNewWorld(939293, "save3");
+						World.createNewWorld(3294, "save3");
 						currentSection = MenuSection.START;
 					}else {
 						currentSection = MenuSection.MAIN;
