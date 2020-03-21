@@ -9,6 +9,7 @@ import org.joml.Vector2i;
 
 import com.draglantix.flare.collision.AABB;
 import com.draglantix.flare.collision.AABBCollider;
+import com.draglantix.tiles.TileLib;
 
 public class Generator {
 	
@@ -20,6 +21,7 @@ public class Generator {
 	private List<Vector2i> cell_stack;
 	private List<Vector2i> dead_ends;
 	private List<List<Vector2i>> room_connections;
+	private List<Vector2i> door_pos;
 	
 	public Generator(int seed) {
 		random.setSeed(seed);
@@ -36,6 +38,7 @@ public class Generator {
 		cell_stack = new ArrayList<Vector2i>();
 		dead_ends = new ArrayList<Vector2i>();
 		room_connections = new ArrayList<List<Vector2i>>();
+		door_pos = new ArrayList<Vector2i>();
 		
 		for(int x = 1; x < World.TILE_MAP_SIZE-2; x+=2) {
 			for(int y = 1; y < World.TILE_MAP_SIZE-2; y+=2) {
@@ -47,6 +50,7 @@ public class Generator {
 		generateMaze();
 		connectDoors();
 		decayBranches();
+		decorate_stone();
 	}
 	
 	private void generateRooms() {
@@ -176,14 +180,59 @@ public class Generator {
 						x = core_cells.get(0).x;
 						y = core_cells.get(0).y;
 						dead_ends.add(new Vector2i(x, y));
-						System.out.println("New Maze");
 					}else {
 						alive = false;
-						System.out.println("Dead");
 					}
 				}
 			}
 		}
+		
+	}
+	
+	private void decorate_stone() {
+		
+		int[][] tmp = new int[World.TILE_MAP_SIZE][World.TILE_MAP_SIZE];
+		
+		for(int x = 1; x < World.TILE_MAP_SIZE-1; x++) {
+			for(int y = 1; y < World.TILE_MAP_SIZE-1; y++) {
+				tmp[x][y] = tile[x][y];
+			}
+		}
+		
+		for(int x = 0; x < World.TILE_MAP_SIZE; x++) {
+			for(int y = 0; y < World.TILE_MAP_SIZE; y++) {
+				int type = random.nextInt(10);
+				if(tile[x][y] == 1) {
+					if(type > 7) {
+						tmp[x][y] = TileLib.TILE_IDS.get("stone_wall_cracked");
+					}else {
+						tmp[x][y] = TileLib.TILE_IDS.get("stone_wall");
+					}
+				}else {
+					
+					if(door_pos.contains(new Vector2i(x, y))) {
+						if(type > 5) {
+							tmp[x][y] = TileLib.TILE_IDS.get("door_open");	
+						}else {
+							tmp[x][y] = TileLib.TILE_IDS.get("door_closed");
+						}
+					}else {
+						if(type == 0) {
+							tmp[x][y] = TileLib.TILE_IDS.get("stone_floor_3");
+						}else if (type == 1){
+							tmp[x][y] = TileLib.TILE_IDS.get("stone_floor_2");
+						}else if (type == 2) {
+							tmp[x][y] = TileLib.TILE_IDS.get("stone_floor_1");
+						}else {
+							tmp[x][y] = TileLib.TILE_IDS.get("stone_floor_0");
+						}
+					}
+					
+				}
+			}
+		}
+		
+		tile = tmp;
 		
 	}
 	
@@ -216,6 +265,7 @@ public class Generator {
 					connections.remove(new Vector2i(door.x, door.y+1));
 				}
 				tile[door.x][door.y] = 0;	
+				door_pos.add(door);
 			}
 		}
 	}

@@ -1,46 +1,32 @@
 package com.draglantix.tiles;
 
-import org.joml.Vector2f;
+import org.joml.Vector2i;
 
-import com.draglantix.entities.EntityManager;
-import com.draglantix.flare.collision.AABB;
 import com.draglantix.flare.graphics.Graphics;
 import com.draglantix.flare.textures.Texture;
 import com.draglantix.flare.util.Color;
-import com.draglantix.main.Assets;
-import com.draglantix.main.Settings;
-import com.draglantix.world.World;
+import com.draglantix.utils.DragonMath;
 
 public class Tile {
-
+	
 	private Texture texture;
+	private boolean solid;
 	private String name;
 	private int id;
-	private Vector2f pos;
-	private AABB bounds;
+	private Vector2i pos;
 	private Color color;
-	private boolean solid;
 	
-	public Tile(Texture texture, String name, int id, Vector2f pos, boolean solid, Color color) {
+	public Tile(Texture texture, String name, int id, Vector2i pos, boolean solid, boolean flag, Color color) {
 		this.texture = texture;
 		this.name = name;
 		this.id = id;
 		this.pos = pos;
 		this.solid = solid;
-		if(solid) {
-			this.bounds = new AABB(pos, new Vector2f(World.TILE_SIZE), false);
-			EntityManager.tileBounds.add(bounds);
-		}else {
-			bounds = null;
-		}
 		this.color = color;
 	}
-	
+
 	public void render(Graphics g) {
-		g.drawImage(texture, pos, TileLib.scale, TileLib.rotation, color);
-		if(solid && Settings.DEBUG) {
-			g.drawImage(Assets.debug, new Vector2f(bounds.getCenter()), new Vector2f(bounds.getScale()), new Vector2f(0,0), new Color(255, 255, 255, 1));
-		}
+		g.drawImage(texture, DragonMath.worldPos(pos), TileLib.scale, TileLib.rotation, color);
 	}
 
 	public Texture getTexture() {
@@ -59,12 +45,20 @@ public class Tile {
 		return id;
 	}
 	
-	public Vector2f getPos() {
+	public Vector2i getPos() {
 		return pos;
 	}
 
-	public void setPos(Vector2f pos) {
+	public void setPos(Vector2i pos) {
 		this.pos = pos;
+	}
+
+	public boolean isSolid() {
+		return solid;
+	}
+
+	public void setSolid(boolean solid) {
+		this.solid = solid;
 	}
 	
 }

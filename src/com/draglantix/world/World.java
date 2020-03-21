@@ -8,7 +8,7 @@ import com.draglantix.tiles.TileMap;
 
 public class World {
 
-	public static final int TILE_MAP_SIZE = 128;
+	public static final int TILE_MAP_SIZE = 32;
 	public static final int TILE_SIZE = 8;
 
 	private static int seed;

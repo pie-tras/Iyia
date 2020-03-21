@@ -1,6 +1,7 @@
 package com.draglantix.tiles;
 
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 
 import com.draglantix.flare.graphics.Graphics;
 import com.draglantix.flare.util.Reader;
@@ -9,7 +10,7 @@ import com.draglantix.world.World;
 
 public class TileMap {
 	
-	private Tile[][] map = new Tile[World.TILE_MAP_SIZE][World.TILE_MAP_SIZE];
+	private static Tile[][] map = new Tile[World.TILE_MAP_SIZE][World.TILE_MAP_SIZE];
 	
 	private String name;
 	
@@ -37,8 +38,7 @@ public class TileMap {
 				
 				int id = Reader.parseInt(tokens[x+(y*(World.TILE_MAP_SIZE))]);
 				
-				map[x][y] = TileLib.createTile(id, new Vector2f((x * World.TILE_SIZE) - ((World.TILE_SIZE * World.TILE_MAP_SIZE)/2),
-																(y * World.TILE_SIZE) - ((World.TILE_SIZE * World.TILE_MAP_SIZE)/2)));
+				map[x][y] = TileLib.createTile(id, new Vector2i(x, y));
 			}
 		}
 	}

@@ -1,11 +1,12 @@
 package com.draglantix.entities;
 
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 
 import com.draglantix.flare.audio.AudioMaster;
 import com.draglantix.flare.audio.Source;
-import com.draglantix.flare.collision.AABB;
 import com.draglantix.flare.textures.Animation;
+import com.draglantix.utils.DragonMath;
 
 public abstract class Dynamic extends Entity{
 
@@ -13,18 +14,14 @@ public abstract class Dynamic extends Entity{
 	
 	protected boolean alive = true;
 	protected float health = 1f;
-	protected float speed = 1f;
 
 	protected Animation animation = null;
-
-	protected AABB bounds;
 	
-	public Dynamic(Animation animation, Vector2f position, Vector2f scale, AABB bounds) {
+	public Dynamic(Animation animation, Vector2i position, Vector2f scale) {
 		super(animation.getTexture(), position, scale);
 		this.animation = animation;
-		this.bounds = bounds;
 		source = new Source(1.5f, 10f, 0);
-		source.setPosition(this.position);
+		source.setPosition(DragonMath.worldPos(this.position));
 		AudioMaster.sources.add(source);
 	}
 	
@@ -33,30 +30,21 @@ public abstract class Dynamic extends Entity{
 		if(animation != null) {
 			this.texture = animation.getTexture();
 		}
-		source.setPosition(position);
+		source.setPosition(DragonMath.worldPos(this.position));
 		alive = checkLiving();
+	}
+
+	public void move(Vector2i dir) {
+		//dir = checkCollisions();
+		this.position.add(dir);
+	}
+	
+	private Vector2i checkCollisions() {
+		return null;
 	}
 	
 	private boolean checkLiving() {
 		return health > 0f;
-	}
-
-	public void move(Vector2f dir) {
-		if(bounds != null) {
-			bounds.getCenter().add(dir);
-			EntityManager.checkCollisions(this);
-			position = new Vector2f(bounds.getCenter());
-		}else {
-			position.add(dir);
-		}
-	}
-	
-	public float getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(float speed) {
-		this.speed = speed;
 	}
 	
 	public float getHealth() {
