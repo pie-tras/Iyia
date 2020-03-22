@@ -42,6 +42,20 @@ public class TileMap {
 			}
 		}
 	}
+	
+	public static Tile getTile(Vector2i pos) {
+		try {
+			return map[pos.x][pos.y];
+		}catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public static void setTile(Tile t, Vector2i pos) {
+		try {
+			 map[pos.x][pos.y] = t;
+		}catch(Exception e) {}
+	}
 
 	public String getName() {
 		return name;

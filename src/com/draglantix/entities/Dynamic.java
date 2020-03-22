@@ -6,15 +6,18 @@ import org.joml.Vector2i;
 import com.draglantix.flare.audio.AudioMaster;
 import com.draglantix.flare.audio.Source;
 import com.draglantix.flare.textures.Animation;
+import com.draglantix.tiles.Tile;
+import com.draglantix.tiles.TileLib;
+import com.draglantix.tiles.TileMap;
 import com.draglantix.utils.DragonMath;
 
 public abstract class Dynamic extends Entity{
 
 	protected Source source;
 	
-	protected boolean alive = true;
+	protected boolean alive = true, interacting = false, swimming = false;
 	protected float health = 1f;
-
+	
 	protected Animation animation = null;
 	
 	public Dynamic(Animation animation, Vector2i position, Vector2f scale) {
@@ -27,6 +30,10 @@ public abstract class Dynamic extends Entity{
 	
 	@Override
 	public void tick() {
+		if(interacting && this.animation.hasPlayed()) {
+			interacting = false;
+			this.animation.setHasPlayed(false);
+		}
 		if(animation != null) {
 			this.texture = animation.getTexture();
 		}
@@ -35,12 +42,55 @@ public abstract class Dynamic extends Entity{
 	}
 
 	public void move(Vector2i dir) {
-		//dir = checkCollisions();
-		this.position.add(dir);
+		Vector2i open = checkCollisions(new Vector2i(dir));
+		interact(dir);
+		this.position.add(open);
+		stand(TileMap.getTile(this.position));
 	}
 	
-	private Vector2i checkCollisions() {
-		return null;
+	private Vector2i checkCollisions(Vector2i dir) {
+		Tile tx = TileMap.getTile(this.position.add(new Vector2i(dir.x, 0), new Vector2i()));
+		
+		if(tx != null && tx.isSolid()) {
+			dir.x = 0;
+		}
+		
+		Tile ty = TileMap.getTile(this.position.add(new Vector2i(0, dir.y), new Vector2i()));
+		
+		if(ty != null && ty.isSolid()) {
+			dir.y = 0;
+		}
+		
+		return dir;
+	}
+	
+	private void interact(Vector2i dir) {
+		Tile t = TileMap.getTile(this.position.add(dir, new Vector2i()));
+		
+		String out = null;
+		
+		if(t.getName() == "door_open") {
+			out = "door_closed";
+		}
+		
+		if(t.getName() == "door_closed") {
+			out = "door_open";
+		}
+		
+		if(out != null) {
+			TileMap.setTile(TileLib.createTile(TileLib.TILE_IDS.get(out), t.getPos()), t.getPos());
+			interacting = true;
+			this.animation.setHasPlayed(false);
+		}
+		
+	}
+	
+	private void stand(Tile t) {
+		if(t.getName() == "water") {
+			swimming = true;
+		}else {
+			swimming = false;
+		}
 	}
 	
 	private boolean checkLiving() {

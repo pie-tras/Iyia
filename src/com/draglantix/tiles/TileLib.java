@@ -18,7 +18,6 @@ public class TileLib {
 	
 	public static BidiMap<String, Integer> TILE_IDS = new BidiMap<String, Integer>();
 	public static List<String> SOLIDS = new ArrayList<String>();
-	public static List<String> FLAGS = new ArrayList<String>();
 	
 	static{
 		TILE_IDS.put("stone_floor_0", 0);
@@ -39,8 +38,7 @@ public class TileLib {
 	    TILE_IDS.put("stair_up", 10);
 	    TILE_IDS.put("stair_down", 11);
 	    
-	    TILE_IDS.put("water_0", 12);
-	    TILE_IDS.put("water_1", 13);
+	    TILE_IDS.put("water", 12);
 	    
 	    //Solids///////////
 	    
@@ -48,16 +46,15 @@ public class TileLib {
 		SOLIDS.add("stone_wall_cracked");
 		
 		SOLIDS.add("door_closed");
-		
-		//Flags/////////////
-		
-		FLAGS.add("door_open");
-		FLAGS.add("door_closed");
 	}
 	
 	public static Tile createTile(int id, Vector2i pos) {
 		String name = TILE_IDS.getKey(id);
-		return new Tile(Assets.tiles.get(id), name, id, pos, SOLIDS.contains(name), FLAGS.contains(name), new Color(255, 255, 255, 1));
+		if(name == "water") {
+			return new Tile(Assets.tiles.getAnimation(id, 2), name, id, pos, SOLIDS.contains(name), new Color(255, 255, 255, 1));
+		}else {
+			return new Tile(Assets.tiles.get(id), name, id, pos, SOLIDS.contains(name), new Color(255, 255, 255, 1));
+		}
 	}
 	
 }

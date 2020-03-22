@@ -12,7 +12,6 @@ public class Player extends Dynamic{
 
 	private Vector2i destination = new Vector2i(0, 0);
 	private float faceX = 1;
-	protected boolean interacting = false;
 	
 	public Player(Animation animation, Vector2i position, Vector2f scale) {
 		super(animation, position, scale);
@@ -22,47 +21,55 @@ public class Player extends Dynamic{
 	public void tick() {
 		super.tick();
 		
-		destination.x = 0;
-		destination.y = 0;
+		if(alive) {
 		
-		if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_D)) {
-			destination.x++;
-			if(faceX != destination.x)
-				flip();
-		}
-
-		if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_A)) {
-			destination.x--;
-			if(faceX != destination.x)
-				flip();
-		}
-
-		if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_W)) {
-			destination.y++;
-		}
-
-		if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_S)) {
-			destination.y--;
-		}
+			destination.x = 0;
+			destination.y = 0;
+			
+			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_D)) {
+				destination.x++;
+				if(faceX != destination.x)
+					flip();
+			}
+	
+			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_A)) {
+				destination.x--;
+				if(faceX != destination.x)
+					flip();
+			}
+	
+			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_W)) {
+				destination.y++;
+			}
+	
+			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_S)) {
+				destination.y--;
+			}
+			
+			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_K)) {
+				health -= this.health;
+			}
+			
+			if(destination.x != 0) {
+				faceX = destination.x;
+			}
+			
+			if(destination.length() != 0) {
+				move(destination);
+			}
 		
-		if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_J)) {
-			interacting = true;
-		}
-		
-		if(destination.x != 0) {
-			faceX = destination.x;
-		}
-		
-		if(destination.length() != 0) {
-			move(destination);
 		}
 		
 		handleAnimations();
 	}
 	
 	private void handleAnimations() {
-		if(interacting) {
+		if(!alive) {
+			this.animation = Assets.playerDie;
+		}else if(interacting) {
 			this.animation = Assets.playerInteract;
+		}else if(swimming){
+			this.animation = Assets.playerSwimming;
 		}else {
 			this.animation = Assets.playerIdle;
 		}

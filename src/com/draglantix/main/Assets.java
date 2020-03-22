@@ -26,7 +26,7 @@ public class Assets {
 	
 	public static SpriteSheet player, sheep, slime;
 	
-	public static Animation playerIdle, playerInteract, playerDie;
+	public static Animation playerIdle, playerInteract, playerSwimming, playerDie;
 
 	public static void init(Graphics g) {
 
@@ -47,9 +47,10 @@ public class Assets {
 		player = new SpriteSheet("textures/player.png");
 		sheep = new SpriteSheet("textures/sheep.png");
 		
-		playerIdle = new Animation(3, 3, 8, 4, player, 0, 2, true);
-		playerInteract = new Animation(3, 3, 8, 8, player, 2, 2, true);
-		playerDie = new Animation(3, 3, 8, 4, player, 4, 4, true);
+		playerIdle = new Animation(4, 4, 8, 4, player, 0, 2, true);
+		playerInteract = new Animation(4, 4, 8, 16, player, 1, 4, false);
+		playerSwimming = new Animation(4, 4, 8, 4, player, 5, 3, true);
+		playerDie = new Animation(4, 4, 8, 8, player, 8, 4, false);
 	
 	}
 }

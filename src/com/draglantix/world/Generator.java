@@ -201,9 +201,9 @@ public class Generator {
 		
 		for(int x = 0; x < World.TILE_MAP_SIZE; x++) {
 			for(int y = 0; y < World.TILE_MAP_SIZE; y++) {
-				int type = random.nextInt(10);
+				int type = random.nextInt(100);
 				if(tile[x][y] == 1) {
-					if(type > 7) {
+					if(type > 70) {
 						tmp[x][y] = TileLib.TILE_IDS.get("stone_wall_cracked");
 					}else {
 						tmp[x][y] = TileLib.TILE_IDS.get("stone_wall");
@@ -211,18 +211,22 @@ public class Generator {
 				}else {
 					
 					if(door_pos.contains(new Vector2i(x, y))) {
-						if(type > 5) {
+						if(type > 50) {
 							tmp[x][y] = TileLib.TILE_IDS.get("door_open");	
 						}else {
 							tmp[x][y] = TileLib.TILE_IDS.get("door_closed");
 						}
 					}else {
-						if(type == 0) {
+						if(type < 10) {
 							tmp[x][y] = TileLib.TILE_IDS.get("stone_floor_3");
-						}else if (type == 1){
+						}else if (type >= 10 && type < 20){
 							tmp[x][y] = TileLib.TILE_IDS.get("stone_floor_2");
-						}else if (type == 2) {
+						}else if (type >= 20 && type < 30) {
 							tmp[x][y] = TileLib.TILE_IDS.get("stone_floor_1");
+						}else if (type >= 30 && type < 35) {
+							tmp[x][y] = TileLib.TILE_IDS.get("wood");
+						}else if (type >= 35 && type < 70) {
+							tmp[x][y] = TileLib.TILE_IDS.get("water");
 						}else {
 							tmp[x][y] = TileLib.TILE_IDS.get("stone_floor_0");
 						}
