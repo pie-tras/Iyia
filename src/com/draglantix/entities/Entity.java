@@ -16,6 +16,8 @@ public abstract class Entity {
 	
 	protected boolean onScreen;
 	
+	protected boolean pushable = false;
+	
 	protected float rot = 0;
 
 	public Entity(Texture texture, Vector2i position, Vector2f scale) {

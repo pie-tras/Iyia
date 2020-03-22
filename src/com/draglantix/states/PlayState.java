@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.draglantix.entities.EntityManager;
 import com.draglantix.entities.Player;
+import com.draglantix.entities.Sheep;
 import com.draglantix.flare.graphics.Graphics;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
@@ -27,7 +28,9 @@ public class PlayState extends GameState {
 	public void init() {
 		world = new World();
 		player = new Player(Assets.playerIdle, new Vector2i(15, 20), new Vector2f(8, 8));
-		EntityManager.dynamics.add(player);
+		EntityManager.addEntity(player);
+		
+		EntityManager.addEntity(new Sheep(Assets.sheepIdle, new Vector2i(13, 23), new Vector2f(8, 8)));
 	}
 	
 	@Override

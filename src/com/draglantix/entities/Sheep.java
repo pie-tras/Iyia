@@ -9,6 +9,7 @@ public class Sheep extends Dynamic{
 
 	public Sheep(Animation animation, Vector2i position, Vector2f scale) {
 		super(animation, position, scale);
+		pushable = true;
 	}
 	
 	@Override

@@ -28,6 +28,8 @@ public class Assets {
 	
 	public static Animation playerIdle, playerInteract, playerSwimming, playerDie;
 
+	public static Animation sheepIdle, sheepInteract;
+	
 	public static void init(Graphics g) {
 
 		camera = new Camera(new Vector2f(0, 0), 0, 0, .07f);
@@ -51,6 +53,9 @@ public class Assets {
 		playerInteract = new Animation(4, 4, 8, 16, player, 1, 4, false);
 		playerSwimming = new Animation(4, 4, 8, 4, player, 5, 3, true);
 		playerDie = new Animation(4, 4, 8, 8, player, 8, 4, false);
+		
+		sheepIdle = new Animation(2, 2, 8, 4, sheep, 0, 2, true);
+		sheepInteract = new Animation(2, 2, 8, 4, sheep, 2, 2, false);
 	
 	}
 }
