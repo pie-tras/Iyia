@@ -50,51 +50,13 @@ public abstract class Dynamic extends Entity{
 	
 	private Vector2i checkCollisions(Vector2i dir) {
 		
-		Vector2i dx = this.position.add(dir.x, 0, new Vector2i());
-		Vector2i dy = this.position.add(0, dir.y, new Vector2i());
+		Vector2i dpos = this.position.add(dir.x, dir.y, new Vector2i());
+		Tile t = TileMap.getTile(dpos);
+		Entity e = EntityManager.getEntity(dpos);
 		
-		Tile tx = TileMap.getTile(dx);
-		Tile ty = TileMap.getTile(dy);
-		
-		Entity ex = EntityManager.getEntity(dx);
-		Entity ey = EntityManager.getEntity(dy);
-		
-		if(tx != null && tx.isSolid()) {
+		if(t != null && t.isSolid()) {
 			dir.x = 0;
-		}
-		
-		if(ty != null && ty.isSolid()) {
 			dir.y = 0;
-		}
-		
-		if(ex != null) {
-			if(ex.pushable) {
-				Tile nextX = TileMap.getTile(this.position.add(dir.x, 0, new Vector2i()));
-				if(nextX != null && !nextX.isSolid()) {
-					ex.setPosition(nextX.getPos());
-				}
-			}else {
-				dir.x = 0;
-			}
-		}
-		
-		if(ey != null) {
-			if(ey.pushable) {
-				Tile nextY = TileMap.getTile(this.position.add(0, dir.y, new Vector2i()));
-				if(nextY != null && !nextY.isSolid()) {
-					ey.setPosition(nextY.getPos());
-				}
-			}else {
-				dir.y = 0;
-			}
-		}
-		
-		if(ey != null) {
-			if(ey.pushable) {
-			
-			}else {
-				
-			}
 		}
 		
 		return dir;

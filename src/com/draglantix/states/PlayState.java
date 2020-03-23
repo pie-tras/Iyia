@@ -8,6 +8,7 @@ import com.draglantix.entities.EntityManager;
 import com.draglantix.entities.Player;
 import com.draglantix.entities.Sheep;
 import com.draglantix.flare.graphics.Graphics;
+import com.draglantix.flare.util.Color;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
 import com.draglantix.utils.DragonMath;
@@ -44,6 +45,7 @@ public class PlayState extends GameState {
 		g.drawMode(g.DRAW_WORLD);
 		world.render(g);
 		EntityManager.render(g);
+		g.drawImage(Assets.debug, DragonMath.worldPos(DragonMath.tilePos(DragonMath.convertScreenSpace().add(new Vector2f(World.TILE_SIZE/2)))), new Vector2f(8, 8), new Vector2f(0, 0), new Color(255, 255, 255, 1));
 	}
 	
 	public void updateCamera() {

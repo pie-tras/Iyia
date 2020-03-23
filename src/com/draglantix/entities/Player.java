@@ -2,11 +2,12 @@ package com.draglantix.entities;
 
 import org.joml.Vector2f;
 import org.joml.Vector2i;
-import org.lwjgl.glfw.GLFW;
 
 import com.draglantix.flare.textures.Animation;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
+import com.draglantix.utils.DragonMath;
+import com.draglantix.world.World;
 
 public class Player extends Dynamic{
 
@@ -22,40 +23,12 @@ public class Player extends Dynamic{
 		super.tick();
 		
 		if(alive) {
-		
+			
 			destination.x = 0;
 			destination.y = 0;
 			
-			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_D)) {
-				destination.x++;
-				if(faceX != destination.x)
-					flip();
-			}
-	
-			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_A)) {
-				destination.x--;
-				if(faceX != destination.x)
-					flip();
-			}
-	
-			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_W)) {
-				destination.y++;
-			}
-	
-			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_S)) {
-				destination.y--;
-			}
-			
-			if(Window.getInput().isKeyPressed(GLFW.GLFW_KEY_K)) {
-				health -= this.health;
-			}
-			
-			if(destination.x != 0) {
-				faceX = destination.x;
-			}
-			
-			if(destination.length() != 0) {
-				move(destination);
+			if(Window.getInput().isMouseButtonPressed(0)) {
+				this.position = DragonMath.tilePos(DragonMath.convertScreenSpace().add(new Vector2f(World.TILE_SIZE/2)));
 			}
 		
 		}

@@ -1,8 +1,5 @@
 package com.draglantix.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
@@ -12,7 +9,7 @@ import com.draglantix.world.World;
 
 public class EntityManager {
 
-	private static List<Entity> entities = new ArrayList<Entity>();
+	//private static BidiMap<Vector2i, Entity> entities = new ArrayList<Entity>();
 	private static Entity[][] entity_map = new Entity[World.TILE_MAP_SIZE][World.TILE_MAP_SIZE];
 	
 	public static void tick() {
@@ -40,7 +37,7 @@ public class EntityManager {
 	}
 	
 	public static void addEntity(Entity e) {
-		entities.add(e);
+		//entities.add(e);
 		entity_map[e.getPosition().x][e.getPosition().y] = e;
 	}
 	

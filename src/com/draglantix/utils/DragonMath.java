@@ -1,9 +1,12 @@
 package com.draglantix.utils;
 
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
+import org.joml.Vector4f;
 
 import com.draglantix.flare.graphics.Graphics;
+import com.draglantix.flare.util.Functions;
 import com.draglantix.flare.window.Window;
 import com.draglantix.main.Assets;
 import com.draglantix.world.World;
@@ -15,6 +18,22 @@ public class DragonMath {
 				(tilePos.y * World.TILE_SIZE) - ((World.TILE_SIZE * World.TILE_MAP_SIZE)/2));
 	}
 	
+	public static Vector2i tilePos(Vector2f worldPos) {
+		float x = (worldPos.x + ((World.TILE_SIZE * World.TILE_MAP_SIZE)/2)) / World.TILE_SIZE;
+		float y = (worldPos.y + ((World.TILE_SIZE * World.TILE_MAP_SIZE)/2)) / World.TILE_SIZE;
+		
+		return new Vector2i((int)x, (int)y);
+	}
+	
+	public static Vector2f convertScreenSpace() {
+		Vector2f ndc = new Vector2f((2.0f * Window.getInput().getMousePos().x) / Window.getWidth() - 1f,
+				1f - (2.0f * Window.getInput().getMousePos().y) / Window.getHeight());
+		Vector4f clipCoords = new Vector4f(ndc.x, ndc.y, -1.0f, 1.0f);
+		Matrix4f m = Functions.createProjectionMatrix(Window.getWidth(), Window.getHeight()).mul(Assets.camera.createViewMatrix()).invertOrtho();
+		Vector4f worldRay = clipCoords.mul(m);
+		return new Vector2f(worldRay.x/Graphics.getScale(), worldRay.y/Graphics.getScale());
+	}
+
 	public static int floor(float num) {
 		return (int) Math.floor((double) num);
 	}
